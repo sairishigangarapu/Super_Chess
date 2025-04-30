@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-900 text-white">
+    <div class="min-h-screen p-10">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Leaderboard</h1>
+            <a href="/dashboard" class="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg">Back to Dashboard</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full bg-zinc-800 rounded-lg">
+                <thead>
+                    <tr class="bg-blue-600 text-left">
+                        <th class="p-4">Rank</th>
+                        <th class="p-4">Player</th>
+                        <th class="p-4">Games</th>
+                        <th class="p-4">Wins</th>
+                        <th class="p-4">Losses</th>
+                        <th class="p-4">Win Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach((user, index) => { %>
+                        <tr class="border-b border-zinc-700">
+                            <td class="p-4"><%= index + 1 %></td>
+                            <td class="p-4 flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full overflow-hidden">
+                                    <% if (user.profilepic && user.profilepic !== 'default.png') { %>
+                                        <img src="/images/uploads/<%= user.profilepic %>" alt="Profile Picture" class="w-full h-full object-cover">
+                                    <% } else { %>
+                                        <div class="w-full h-full bg-blue-500 flex items-center justify-center">
+                                            <%= user.username.charAt(0).toUpperCase() %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <%= user.username %>
+                            </td>
+                            <td class="p-4"><%= user.gamesPlayed %></td>
+                            <td class="p-4"><%= user.wins %></td>
+                            <td class="p-4"><%= user.losses %></td>
+                            <td class="p-4"><%= (user.winRate * 100).toFixed(2) %>%</td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-900 text-white">
+    <div class="min-h-screen p-10">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Chess Game Dashboard</h1>
+            <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Logout</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="/play" class="block p-6 bg-blue-500 hover:bg-blue-600 rounded-lg text-center text-xl font-semibold">Play Game</a>
+            <a href="/profile" class="block p-6 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-center text-xl font-semibold">View Profile</a>
+            <a href="/users" class="block p-6 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-center text-xl font-semibold">All Users</a>
+            <a href="/leaderboard" class="block p-6 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-center text-xl font-semibold">Leaderboard</a>
+        </div>
+    </div>
+</body>
+</html>

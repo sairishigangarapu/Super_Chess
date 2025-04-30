@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chessboard {
+            display: grid;
+            grid-template-columns: repeat(8, minmax(0, 1fr));
+            grid-template-rows: repeat(8, minmax(0, 1fr));
+            width: 400px;
+            height: 400px;
+            transform: rotate(0deg);
+        }
+        .piece.white { color: white; filter: drop-shadow(0 0 2px rgba(0, 0, 0, 1)); }
+        .piece.black { color: black; }
+        .flipped { transform: rotate(180deg); }
+        .square { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .square.light { background-color: #f0d9b5; }
+        .square.dark { background-color: #b58863; }
+        .piece { font-size: 36px; cursor: pointer; }
+        .piece.draggable { cursor: grab; }
+        .dragging { opacity: 0.5; }
+        .flipped .piece { transform: rotate(180deg); }
+    </style>
+</head>
+<body class="bg-zinc-900 text-white">
+    <div class="min-h-screen flex flex-col items-center justify-center p-10">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-full overflow-hidden">
+                <% if (user.profilepic && user.profilepic !== 'default.png') { %>
+                    <img src="/images/uploads/<%= user.profilepic %>" alt="Profile Picture" class="w-full h-full object-cover">
+                <% } else { %>
+                    <div class="w-full h-full bg-blue-500 flex items-center justify-center">
+                        <%= user.username.charAt(0).toUpperCase() %>
+                    </div>
+                <% } %>
+            </div>
+            <h2 class="text-2xl font-semibold"><%= user.username %></h2>
+        </div>
+        <div id="gameStatus" class="text-xl mb-6"></div>
+        <div class="chessboard h-96 w-96"></div>
+        <a href="/dashboard" class="mt-6 text-blue-400 hover:text-blue-300">Back to Dashboard</a>
+    </div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script>
+        window.USER_ID = "<%= user._id %>";
+    </script>
+    <script src="/js/chessgame.js" defer></script>
+</body>
+</html>
