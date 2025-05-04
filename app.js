@@ -1,3 +1,5 @@
+require('dotenv').config(); // Add at the very top
+
 const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
@@ -11,12 +13,15 @@ const multer = require('multer');
 const userModel = require('./models/user');
 const upload = require('./config/multerconfig');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-very-strong-secret-key';
+
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/chessgame');
+// mongoose.connect('mongodb://127.0.0.1:27017/chessgame'); // Remove or comment out this line
+mongoose.connect(process.env.DATABASE_URL); // Use the variable from .env
 
 // Game state
 const chess = new Chess();
@@ -36,7 +41,7 @@ function isLoggedIn(req, res, next) {
     try {
         const token = req.cookies.token;
         if (!token) return res.redirect('/login');
-        const decoded = jwt.verify(token, 'secret');
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
     } catch (error) {
@@ -58,7 +63,7 @@ app.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const existingUser = await userModel.findOne({ email });
-        if (existingUser) return res.status(409).json({ error: 'User already registered' });
+        if (existingUser) return res.redirect('/error?message=User%20already%20registered');
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
@@ -72,11 +77,12 @@ app.post('/register', async (req, res) => {
             losses: 0
         });
 
-        const token = jwt.sign({ email: user.email, userid: user._id }, 'secret');
-        res.cookie('token', token, { httpOnly: true });
+        const token = jwt.sign({ email: user.email, userid: user._id }, JWT_SECRET, { expiresIn: '2h' });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
         res.redirect('/dashboard');
     } catch (error) {
-        res.status(500).json({ error: 'Registration failed' });
+        console.error('Registration error:', error.message);
+        res.redirect('/error?message=Registration%20failed');
     }
 });
 
@@ -88,16 +94,17 @@ app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
-        if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+        if (!user) return res.redirect('/error?message=Invalid%20credentials');
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return res.status(401).json({ error: 'Invalid credentials' });
+        if (!isValid) return res.redirect('/error?message=Invalid%20credentials');
 
-        const token = jwt.sign({ email: user.email, userid: user._id }, 'secret');
-        res.cookie('token', token, { httpOnly: true });
+        const token = jwt.sign({ email: user.email, userid: user._id }, JWT_SECRET, { expiresIn: '2h' });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
         res.redirect('/dashboard');
     } catch (error) {
-        res.status(500).json({ error: 'Login failed' });
+        console.error('Login error:', error.message);
+        res.redirect('/error?message=Login%20failed');
     }
 });
 
@@ -115,7 +122,8 @@ app.get('/profile', isLoggedIn, async (req, res) => {
         const user = await userModel.findById(req.user.userid);
         res.render('profile', { user });
     } catch (error) {
-        res.status(500).send('Failed to load profile');
+        console.error('Profile load error:', error.message);
+        res.redirect('/error?message=Failed%20to%20load%20profile');
     }
 });
 
@@ -125,22 +133,25 @@ app.get('/profile/upload', isLoggedIn, (req, res) => {
 
 app.post('/upload', isLoggedIn, upload.single('image'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+        if (!req.file) return res.redirect('/error?message=No%20file%20uploaded');
         const user = await userModel.findById(req.user.userid);
         user.profilepic = req.file.filename;
         await user.save();
         res.redirect('/profile');
     } catch (error) {
-        res.status(500).json({ error: 'Failed to upload file' });
+        console.error('Upload error:', error.message);
+        res.redirect('/error?message=Failed%20to%20upload%20file');
     }
 });
 
 app.get('/users', isLoggedIn, async (req, res) => {
     try {
-        const users = await userModel.find({}, 'username email profilepic');
+        // Include winRate in the fields fetched
+        const users = await userModel.find({}, 'username email profilepic winRate');
         res.render('users', { users });
     } catch (error) {
-        res.status(500).send('Failed to load users');
+        console.error('Users load error:', error.message);
+        res.redirect('/error?message=Failed%20to%20load%20users');
     }
 });
 
@@ -149,13 +160,20 @@ app.get('/leaderboard', isLoggedIn, async (req, res) => {
         const users = await userModel.find().sort({ winRate: -1, wins: -1 });
         res.render('leaderboard', { users });
     } catch (error) {
-        res.status(500).send('Failed to load leaderboard');
+        console.error('Leaderboard load error:', error.message);
+        res.redirect('/error?message=Failed%20to%20load%20leaderboard');
     }
 });
 
 app.get('/play', isLoggedIn, async (req, res) => {
     const user = await userModel.findById(req.user.userid);
     res.render('chess', { title: 'Chess Game', user });
+});
+
+// Error display route
+app.get('/error', (req, res) => {
+    const message = req.query.message || 'An unknown error occurred.';
+    res.render('error', { message });
 });
 
 // Socket.IO Logic
@@ -272,6 +290,12 @@ async function updateGameStats(winnerId, loserId) {
     players = {};
     currentGameId = null;
 }
+
+// General error handler middleware (should be last)
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err.stack);
+    res.redirect('/error?message=An%20unexpected%20error%20occurred');
+});
 
 server.listen(3000, () => {
     console.log('Server running on port 3000');
