@@ -13,7 +13,7 @@
             <a href="/dashboard" class="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg">Back to Dashboard</a>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full bg-zinc-800 rounded-lg">
+            <table class="w-full bg-zinc-800 rounded-lg text-sm">
                 <thead>
                     <tr class="bg-blue-600 text-left">
                         <th class="p-4">Rank</th>
@@ -40,10 +40,10 @@
                                 </div>
                                 <%= user.username %>
                             </td>
-                            <td class="p-4"><%= user.gamesPlayed %></td>
-                            <td class="p-4"><%= user.wins %></td>
-                            <td class="p-4"><%= user.losses %></td>
-                            <td class="p-4"><%= (user.winRate * 100).toFixed(2) %>%</td>
+                            <td class="p-4"><%= user.gamesPlayed || 0 %></td>
+                            <td class="p-4"><%= user.wins || 0 %></td>
+                            <td class="p-4"><%= user.losses || 0 %></td>
+                            <td class="p-4"><%= user.gamesPlayed > 0 ? (user.winRate * 100).toFixed(2) : '0.00' %>%</td>
                         </tr>
                     <% }) %>
                 </tbody>

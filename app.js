@@ -1,5 +1,3 @@
-require('dotenv').config(); // Add at the very top
-
 const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
@@ -13,15 +11,12 @@ const multer = require('multer');
 const userModel = require('./models/user');
 const upload = require('./config/multerconfig');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-very-strong-secret-key';
-
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
 
 // Connect to MongoDB
-// mongoose.connect('mongodb://127.0.0.1:27017/chessgame'); // Remove or comment out this line
-mongoose.connect(process.env.DATABASE_URL); // Use the variable from .env
+mongoose.connect('mongodb://127.0.0.1:27017/chessgame');
 
 // Game state
 const chess = new Chess();
@@ -40,13 +35,16 @@ app.use('/images/uploads', express.static(path.join(__dirname, 'public', 'images
 function isLoggedIn(req, res, next) {
     try {
         const token = req.cookies.token;
-        if (!token) return res.redirect('/login');
-        const decoded = jwt.verify(token, JWT_SECRET);
+        if (!token) {
+            const err = new Error('Please log in to continue.');
+            err.status = 401;
+            throw err;
+        }
+        const decoded = jwt.verify(token, 'secret');
         req.user = decoded;
         next();
     } catch (error) {
-        console.error('Auth error:', error.message);
-        res.redirect('/login');
+        next(error);
     }
 }
 
@@ -59,11 +57,15 @@ app.get('/register', (req, res) => {
     res.render('register');
 });
 
-app.post('/register', async (req, res) => {
+app.post('/register', async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
         const existingUser = await userModel.findOne({ email });
-        if (existingUser) return res.redirect('/error?message=User%20already%20registered');
+        if (existingUser) {
+            const err = new Error('This email is already registered. Try a different one.');
+            err.status = 409;
+            throw err;
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
@@ -74,15 +76,15 @@ app.post('/register', async (req, res) => {
             profilepic: 'default.png',
             gamesPlayed: 0,
             wins: 0,
-            losses: 0
+            losses: 0,
+            winRate: 0
         });
 
-        const token = jwt.sign({ email: user.email, userid: user._id }, JWT_SECRET, { expiresIn: '2h' });
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
+        const token = jwt.sign({ email: user.email, userid: user._id }, 'secret');
+        res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
     } catch (error) {
-        console.error('Registration error:', error.message);
-        res.redirect('/error?message=Registration%20failed');
+        next(error);
     }
 });
 
@@ -90,21 +92,28 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
-        if (!user) return res.redirect('/error?message=Invalid%20credentials');
+        if (!user) {
+            const err = new Error('Invalid email or password.');
+            err.status = 401;
+            throw err;
+        }
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return res.redirect('/error?message=Invalid%20credentials');
+        if (!isValid) {
+            const err = new Error('Invalid email or password.');
+            err.status = 401;
+            throw err;
+        }
 
-        const token = jwt.sign({ email: user.email, userid: user._id }, JWT_SECRET, { expiresIn: '2h' });
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
+        const token = jwt.sign({ email: user.email, userid: user._id }, 'secret');
+        res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
     } catch (error) {
-        console.error('Login error:', error.message);
-        res.redirect('/error?message=Login%20failed');
+        next(error);
     }
 });
 
@@ -117,13 +126,17 @@ app.get('/dashboard', isLoggedIn, (req, res) => {
     res.render('dashboard');
 });
 
-app.get('/profile', isLoggedIn, async (req, res) => {
+app.get('/profile', isLoggedIn, async (req, res, next) => {
     try {
         const user = await userModel.findById(req.user.userid);
+        if (!user) {
+            const err = new Error('User not found.');
+            err.status = 404;
+            throw err;
+        }
         res.render('profile', { user });
     } catch (error) {
-        console.error('Profile load error:', error.message);
-        res.redirect('/error?message=Failed%20to%20load%20profile');
+        next(error);
     }
 });
 
@@ -131,49 +144,58 @@ app.get('/profile/upload', isLoggedIn, (req, res) => {
     res.render('profileupload');
 });
 
-app.post('/upload', isLoggedIn, upload.single('image'), async (req, res) => {
+app.post('/upload', isLoggedIn, upload.single('image'), async (req, res, next) => {
     try {
-        if (!req.file) return res.redirect('/error?message=No%20file%20uploaded');
+        if (!req.file) {
+            const err = new Error('No image file uploaded. Please choose a JPG or PNG.');
+            err.status = 400;
+            throw err;
+        }
         const user = await userModel.findById(req.user.userid);
+        if (!user) {
+            const err = new Error('User not found.');
+            err.status = 404;
+            throw err;
+        }
         user.profilepic = req.file.filename;
         await user.save();
         res.redirect('/profile');
     } catch (error) {
-        console.error('Upload error:', error.message);
-        res.redirect('/error?message=Failed%20to%20upload%20file');
+        next(error);
     }
 });
 
-app.get('/users', isLoggedIn, async (req, res) => {
+app.get('/users', isLoggedIn, async (req, res, next) => {
     try {
-        // Include winRate in the fields fetched
-        const users = await userModel.find({}, 'username email profilepic winRate');
+        const users = await userModel.find({}, 'username email profilepic');
         res.render('users', { users });
     } catch (error) {
-        console.error('Users load error:', error.message);
-        res.redirect('/error?message=Failed%20to%20load%20users');
+        next(error);
     }
 });
 
-app.get('/leaderboard', isLoggedIn, async (req, res) => {
+app.get('/leaderboard', isLoggedIn, async (req, res, next) => {
     try {
         const users = await userModel.find().sort({ winRate: -1, wins: -1 });
         res.render('leaderboard', { users });
     } catch (error) {
-        console.error('Leaderboard load error:', error.message);
-        res.redirect('/error?message=Failed%20to%20load%20leaderboard');
+        next(error);
     }
 });
 
-app.get('/play', isLoggedIn, async (req, res) => {
-    const user = await userModel.findById(req.user.userid);
-    res.render('chess', { title: 'Chess Game', user });
+app.get('/play', isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await userModel.findById(req.user.userid);
+        res.render('chess', { title: 'Chess Game', user });
+    } catch (error) {
+        next(error);
+    }
 });
 
-// Error display route
+// Error route for client-side errors
 app.get('/error', (req, res) => {
-    const message = req.query.message || 'An unknown error occurred.';
-    res.render('error', { message });
+    const message = req.query.message || 'An unexpected error occurred.';
+    res.status(400).render('error', { message });
 });
 
 // Socket.IO Logic
@@ -182,17 +204,16 @@ io.on('connection', (socket) => {
         try {
             const user = await userModel.findById(userId);
             if (!user) {
-                socket.emit('error', 'User not found');
+                socket.emit('error', 'User not found. Please log in again.');
                 return;
             }
 
-            // Prevent same user from being both players
             if (players.white && players.white.userId === userId) {
-                socket.emit('error', 'You are already playing as white. Use another account or a different browser.');
+                socket.emit('error', 'You are already playing as white. Use another account or browser.');
                 return;
             }
             if (players.black && players.black.userId === userId) {
-                socket.emit('error', 'You are already playing as black. Use another account or a different browser.');
+                socket.emit('error', 'You are already playing as black. Use another account or browser.');
                 return;
             }
 
@@ -210,15 +231,25 @@ io.on('connection', (socket) => {
             }
 
             socket.emit('gameStatus', `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`);
+            socket.emit('boardState', chess.fen());
         } catch (error) {
-            socket.emit('error', 'Failed to join game');
+            socket.emit('error', 'Failed to join game. Try refreshing the page.');
         }
     });
 
     socket.on('move', async (move) => {
         try {
-            if (chess.turn() === 'w' && socket.id !== players.white?.socketId) return;
-            if (chess.turn() === 'b' && socket.id !== players.black?.socketId) return;
+            const playerRole = (players.white && players.white.socketId === socket.id) ? 'w' : ((players.black && players.black.socketId === socket.id) ? 'b' : null);
+
+            if (!playerRole) {
+                console.log(`Move attempt by non-player socket: ${socket.id}`);
+                return;
+            }
+
+            if (chess.turn() !== playerRole) {
+                socket.emit('invalidMove', { message: "It's not your turn." });
+                return;
+            }
 
             const result = chess.move(move);
             if (result) {
@@ -227,20 +258,52 @@ io.on('connection', (socket) => {
                 io.emit('boardState', chess.fen());
 
                 let status = `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`;
-                if (chess.in_checkmate()) {
+                let gameOver = false;
+
+                if (chess.isCheckmate()) {
                     status = `Checkmate! ${chess.turn() === 'w' ? 'Black' : 'White'} wins!`;
                     const winner = chess.turn() === 'w' ? players.black : players.white;
                     const loser = chess.turn() === 'w' ? players.white : players.black;
                     await updateGameStats(winner?.userId, loser?.userId);
-                } else if (chess.in_draw()) {
+                    gameOver = true;
+                } else if (chess.isDraw()) {
                     status = 'Game Over: Draw!';
+                    if (players.white?.userId && players.black?.userId) {
+                        await updateGameStats(null, null, true);
+                    }
+                    gameOver = true;
+                } else if (chess.isStalemate()) {
+                    status = 'Game Over: Stalemate!';
+                    if (players.white?.userId && players.black?.userId) {
+                        await updateGameStats(null, null, true);
+                    }
+                    gameOver = true;
+                } else if (chess.isThreefoldRepetition()) {
+                    status = 'Game Over: Draw by Threefold Repetition!';
+                    if (players.white?.userId && players.black?.userId) {
+                        await updateGameStats(null, null, true);
+                    }
+                    gameOver = true;
+                } else if (chess.isInsufficientMaterial()) {
+                    status = 'Game Over: Draw by Insufficient Material!';
+                    if (players.white?.userId && players.black?.userId) {
+                        await updateGameStats(null, null, true);
+                    }
+                    gameOver = true;
                 }
+
                 io.emit('gameStatus', status);
+
+                if (gameOver) {
+                    io.emit('gameOver', status);
+                    resetGame();
+                }
             } else {
-                socket.emit('invalidMove', move);
+                socket.emit('invalidMove', { message: 'Invalid move. Please try again.' });
             }
         } catch (err) {
-            socket.emit('invalidMove', move);
+            console.error('Error processing move:', err);
+            socket.emit('error', 'An error occurred while processing your move.');
         }
     });
 
@@ -249,16 +312,17 @@ io.on('connection', (socket) => {
             if (players.black) {
                 await updateGameStats(players.black.userId, players.white.userId);
                 io.emit('gameStatus', 'White disconnected. Black wins!');
+                io.emit('gameOver', 'White disconnected. Black wins!');
             }
             delete players.white;
         } else if (socket.id === players.black?.socketId) {
             if (players.white) {
                 await updateGameStats(players.white.userId, players.black.userId);
                 io.emit('gameStatus', 'Black disconnected. White wins!');
+                io.emit('gameOver', 'Black disconnected. White wins!');
             }
             delete players.black;
         }
-        // Reset players if both have disconnected
         if (!players.white && !players.black) {
             players = {};
             chess.reset();
@@ -267,34 +331,58 @@ io.on('connection', (socket) => {
     });
 });
 
-async function updateGameStats(winnerId, loserId) {
-    if (winnerId) {
-        const winner = await userModel.findById(winnerId);
-        if (winner) {
-            winner.gamesPlayed += 1;
-            winner.wins += 1;
-            winner.winRate = winner.wins / winner.gamesPlayed;
-            await winner.save();
+async function updateGameStats(winnerId, loserId, isDraw = false) {
+    const updatePlayer = async (playerId, won, lost, drew) => {
+        if (!playerId) return;
+        try {
+            const player = await userModel.findById(playerId);
+            if (player) {
+                player.gamesPlayed = (player.gamesPlayed || 0) + 1;
+                if (won) player.wins = (player.wins || 0) + 1;
+                if (lost) player.losses = (player.losses || 0) + 1;
+                player.winRate = player.gamesPlayed > 0 ? player.wins / player.gamesPlayed : 0;
+                await player.save();
+            }
+        } catch (error) {
+            console.error(`Failed to update stats for player ${playerId}:`, error);
         }
+    };
+
+    if (isDraw) {
+        await updatePlayer(players.white?.userId, false, false, true);
+        await updatePlayer(players.black?.userId, false, false, true);
+    } else {
+        await updatePlayer(winnerId, true, false, false);
+        await updatePlayer(loserId, false, true, false);
     }
-    if (loserId) {
-        const loser = await userModel.findById(loserId);
-        if (loser) {
-            loser.gamesPlayed += 1;
-            loser.losses += 1;
-            loser.winRate = loser.wins / loser.gamesPlayed;
-            await loser.save();
-        }
-    }
-    chess.reset();
-    players = {};
-    currentGameId = null;
 }
 
-// General error handler middleware (should be last)
+function resetGame() {
+    console.log("Resetting game state...");
+    chess.reset();
+    players = {};
+    currentPlayer = 'w';
+    currentGameId = null;
+    io.emit('gameReset');
+}
+
+// Global Error Handler
 app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err.stack);
-    res.redirect('/error?message=An%20unexpected%20error%20occurred');
+    console.error('Unhandled Error:', err.stack || err);
+    const statusCode = err.status || 500;
+    const errorMessage = process.env.NODE_ENV === 'production'
+        ? 'Oops! Something went wrong. Please try again.'
+        : err.message || 'An unexpected error occurred.';
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(statusCode);
+    try {
+        res.render('error', { message: errorMessage });
+    } catch (renderError) {
+        console.error('Error rendering error page:', renderError);
+        res.type('txt').send(`Server Error: ${errorMessage}`);
+    }
 });
 
 server.listen(3000, () => {

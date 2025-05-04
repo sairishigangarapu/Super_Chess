@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-    <link rel="stylesheet" href="/css/output.css"> <%/* Link to Tailwind output */%>
-    <%/* Remove or comment out old stylesheet links */%>
-    <%/* <link rel="stylesheet" href="/css/style.css"> */%>
-    <%/* Remove the inline <style> block if you plan to replace it with Tailwind classes */%>
+    <title>Error - Chess Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <%/* Start using Tailwind classes here! */%>
-    <div class="container mx-auto mt-10 max-w-xl p-6 border border-red-600 rounded-lg bg-red-100 text-red-800 shadow-md">
-        <h1 class="text-2xl font-bold text-red-800 mb-4 text-center">An Error Occurred</h1>
-
-        <% if (typeof message !== 'undefined' && message) { %>
-            <p class="text-lg mb-4"><%= message %></p>
-        <% } else { %>
-            <p class="text-lg mb-4">An unexpected error occurred. Please try again later or contact support.</p>
-        <% } %>
-
-        <div class="text-center">
-             <a href="/" class="text-blue-600 hover:text-blue-800 font-semibold">Go back to Home Page</a>
+<body class="bg-zinc-900 text-white">
+    <div class="min-h-screen flex items-center justify-center p-10">
+        <div class="bg-zinc-800 p-8 rounded-lg shadow-2xl max-w-md w-full text-center">
+            <h1 class="text-4xl font-bold text-red-500 mb-4">Oops! Something Went Wrong</h1>
+            <p class="text-lg text-zinc-400 mb-6">
+                <% if (typeof message !== 'undefined' && message) { %>
+                    <%= message %>
+                <% } else { %>
+                    An unexpected error occurred. Please try again later.
+                <% } %>
+            </p>
+            <div class="flex gap-4 justify-center">
+                <a href="/dashboard" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Go to Dashboard</a>
+                <a href="javascript:history.back()" class="bg-zinc-700 text-white px-6 py-2 rounded-lg hover:bg-zinc-600">Go Back</a>
+            </div>
         </div>
     </div>
 </body>

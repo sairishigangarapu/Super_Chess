@@ -8,8 +8,20 @@ let draggedPiece = null;
 let sourceSquare = null;
 let playerRole = null;
 
-// Join game with user ID (assumed to be passed from server)
-const userId = document.querySelector('body').dataset.userId || 'anonymous';
+// Function to show temporary in-page error message
+const showErrorMessage = (message) => {
+    let errorDiv = document.getElementById('errorMessage');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'errorMessage';
+        errorDiv.className = 'text-red-500 text-lg font-semibold mb-4';
+        document.querySelector('.min-h-screen').insertBefore(errorDiv, document.getElementById('gameStatus'));
+    }
+    errorDiv.innerText = message;
+    setTimeout(() => {
+        errorDiv.innerText = '';
+    }, 3000);
+};
 
 const renderBoard = () => {
     const board = chess.board();
@@ -103,15 +115,32 @@ socket.on('move', (move) => {
 });
 
 socket.on('gameStatus', (status) => {
-    document.getElementById('gameStatus').innerText = status;
+    const gameStatusElement = document.getElementById('gameStatus');
+    gameStatusElement.innerText = status;
+    gameStatusElement.style.fontWeight = 'bold';
+    gameStatusElement.style.color = status.includes('White') ? '#f0d9b5' : '#b58863';
 });
 
 socket.on('error', (message) => {
-    alert(message);
+    window.location.href = `/error?message=${encodeURIComponent(message)}`;
 });
 
-socket.on('invalidMove', (move) => {
-    console.log('Invalid move:', move);
+socket.on('invalidMove', (data) => {
+    showErrorMessage(data.message || 'Invalid move. Please try again.');
+});
+
+socket.on('gameOver', (message) => {
+    showErrorMessage(message);
+    setTimeout(() => {
+        window.location.href = `/error?message=${encodeURIComponent(message)}`;
+    }, 2000);
+});
+
+socket.on('gameReset', () => {
+    console.log('Game has been reset by the server.');
+    chess.reset();
+    renderBoard();
+    document.getElementById('gameStatus').innerText = 'Waiting for players...';
 });
 
 renderBoard();
