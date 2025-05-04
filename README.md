@@ -1,113 +1,115 @@
-# Online Chess Game: A Fun Adventure in Progress! 🎲
+# Super Awesome Chess Adventure! 🏰♟️
 
-Welcome to the Online Chess Game! This is a super exciting computer game where you and a friend can play chess over the internet, like setting up a magical chessboard on your screen and moving pieces with your mouse. It’s a game where two players, each with their own special account, battle to become the chess champion! You can also check a leaderboard to see who’s the best, like a scoreboard in a sports game.
+Hey there, kiddo! Welcome to the Super Awesome Chess Adventure, a magical computer game where you and a buddy can play chess on the internet! It’s like setting up a giant chessboard on your computer screen, dragging knights and queens with your mouse, and battling to be the chess champion. You get your own special account, like joining a secret club, and you can see who’s the best player on a cool leaderboard, like a scoreboard at a sports game. If something goes wrong, a friendly error page pops up to help you out, looking just as cool as the rest of the game!
 
-This project is growing, with new features and updates being uploaded in 2-3 batches to make the game even more awesome. The files shared so far (frontend and backend) are part of the first batch, with fixes for the leaderboard, turn display, and a cool new error page that looks just like the rest of the game. This guide is written so even a 10-year-old can understand it, but it’s packed with all the details you need to start playing. Think of it as a treasure map to set up and enjoy this game step by step. Let’s dive in!
-
----
-
-## Table of Contents
-
-- [What is This Game?](#what-is-this-game)
-- [How Was This Game Made?](#how-was-this-game-made)
-- [About the Batch Updates](#about-the-batch-updates)
-- [Why is This Cool?](#why-is-this-cool)
-- [What You Need Before Starting](#what-you-need-before-starting)
-- [Setting Up the Game](#setting-up-the-game-like-building-a-toy-castle)
-- [Playing the Game](#playing-the-game-your-chess-adventure-begins)
-- [Fixing Problems](#fixing-problems-like-fixing-a-broken-toy)
-- [All Terminal Commands](#all-terminal-commands-your-game-recipe)
-- [What’s Inside the Game?](#whats-inside-the-game-like-peeking-into-a-toy-box)
-- [Tips for a Great Game](#tips-for-a-great-game)
-- [Need Help?](#need-help)
-- [What’s Next?](#whats-next)
+This game is growing bigger and better, with new stuff being added in 2-3 big updates (like getting new toys in batches). Right now, you’ve got the first batch, with a fixed leaderboard, clear turn signs (like “White’s Turn!”), and a super nice error page that matches the game’s dark, starry look. This guide is written just for you, a 10-year-old chess fan, to make setting up and playing as easy as building a LEGO castle. Let’s jump into the adventure!
 
 ---
 
-## What is This Game?
+## What’s in This Guide? 📖
 
-This is a web-based chess game built with cool tools like Node.js, Express, and Socket.IO. It lets you:
-
-- Create an account (like joining a secret chess club).
-- Log in to play chess, check your profile, or see other players.
-- Play chess with a friend, where one of you moves white pieces and the other moves black pieces.
-- See your stats (like how many games you’ve won) on a profile page.
-- Check a leaderboard to see who’s the best, like a points table in a sports tournament.
-- Upload a profile picture to show off your style!
-
-The game runs on your computer (called a “server”) and you play it in a web browser like Chrome or Firefox at [http://localhost:3000](http://localhost:3000). It’s like opening a game room on your computer that you and a friend can visit using different browsers. If something goes wrong, you’ll see a friendly error page that matches the game’s dark, cool look!
-
----
-
-## How Was This Game Made?
-
-This game is extra special because it was built with help from Artificial Intelligence (AI)! We used Grok 3, created by xAI, to put together two big parts of the game:
-
-- **Chess Logic:** This is the brain of the chess game, making sure pieces move correctly, turns switch between players, and the game knows when someone wins (like checkmate!). The AI helped combine the chess rules (using a tool called chess.js) with the online part (using Socket.IO) so players can move pieces in real-time.
-- **User-Thingy Logic:** This is all about players having accounts, logging in, saving their wins and losses, and showing off their profiles and leaderboard. The AI helped mix this with the chess game so only logged-in players can play, and their scores are saved like a report card.
-
-The AI also helped make sure errors show up nicely, so if something breaks, you get a clear message on a page that looks like the rest of the game!
+- What’s This Chess Game?
+- How Did We Make It?
+- What Are These Batches?
+- Why Is This Game So Cool?
+- Stuff You Need to Play
+- Setting Up Your Chess Kingdom
+- Playing the Game
+- Fixing Stuff That Goes Wrong
+- Magic Commands for Your Computer
+- What’s Inside the Game?
+- Tips to Be a Chess Star
+- Help! I’m Stuck!
+- What’s Coming Next?
 
 ---
 
-## About the Batch Updates
+## What’s This Chess Game?
 
-This project is evolving, with new features being added in 2-3 batches! Each batch brings improvements to make the game more fun and polished. Here’s the plan:
+This is a chess game you play on a website that you run on your computer. It’s like having a chessboard that lives in your browser (like Chrome or Firefox). Here’s what you can do:
 
-- **Batch 1:** Includes all the core files (frontend and backend) for chess gameplay, user accounts, profiles, leaderboard, and error handling. This batch fixes the leaderboard to show accurate stats, adds clear turn displays (e.g., “Turn: White”), and shows a cool error page when something goes wrong.
-- **Batch 2:** May include new features like a chat system, move history, or a prettier design.
-- **Batch 3:** Could add advanced features like multiple game rooms, a resign button, or better stats tracking.
+- **Make an Account:** Sign up with a username and password, like getting a ticket to a fun park.
+- **Play Chess:** Battle a friend, where one of you moves white pieces and the other moves black pieces. Drag pieces to make moves!
+- **See Your Score:** Check how many games you’ve won or lost, like getting a report card for chess.
+- **Look at the Leaderboard:** See who’s the best chess player, like a list of top soccer players.
+- **Add a Picture:** Upload a cool photo for your profile, like putting a sticker on your backpack.
+- **Get Help from Errors:** If something breaks, a friendly page shows up with a message like “Oops! Try again!” and buttons to go back.
 
-Check the GitHub repository (replace with your repo link) for the latest files and commit messages to see what’s new in each batch. If you’re trying the game now, you’re using the first batch with the latest fixes!
-
----
-
-## Why is This Cool?
-
-Imagine you and your friend want to play chess, but you’re in different houses. This game lets you play together online! Plus:
-
-- You need an account to play, so it’s like a secret club.
-- You can see how good you are (your “win rate”) and compare with others on the leaderboard.
-- The chessboard moves pieces smoothly when you drag them, like magic!
-- The game now clearly shows whose turn it is (e.g., “Turn: White”) in big, bold letters.
-- If something goes wrong, you’ll see a friendly error page that looks like the rest of the game, telling you what happened.
-- If someone wins, the game keeps track of who’s the champ on the leaderboard.
+You play this game by going to [http://localhost:3000](http://localhost:3000) in your browser, which is like opening a secret door on your computer. You and your friend need two browsers (like two game controllers) to play together.
 
 ---
 
-## What You Need Before Starting
+## How Did We Make It?
 
-Before you can play, you need a few tools, like gathering ingredients to bake a cake. Here’s what you need:
+This game is super special because it was built with a helper called Grok 3, a smart robot brain made by xAI. It’s like having a wizard help us build a castle! Here’s how Grok 3 helped:
 
-- **A Computer:** Any computer (Windows, Mac, or Linux) works.
-- **Node.js:** This is like the engine that makes the game run. It’s a program that understands JavaScript (the language of the game).  
-  Download it from [nodejs.org](https://nodejs.org/). Pick the “LTS” version (like choosing a stable bike).
-- **MongoDB:** This is like a notebook where the game saves player accounts and scores.  
-  Download MongoDB Community Server from [mongodb.com](https://mongodb.com/).  
-  Install it and make sure it’s running (we’ll show you how).
-- **A Web Browser:** Chrome, Firefox, or Edge. You’ll need two browser windows (one normal, one incognito) to play as two players.
-- **A Terminal:** This is like a command center where you type instructions.  
-  On Windows, use Command Prompt or PowerShell.  
-  On Mac/Linux, use Terminal.
-- **A Code Editor (optional):** Like VS Code, to view or edit the game files. Think of it as a notepad for code.
+- **Chess Magic:** Made the chessboard work so pieces move right, turns switch (like “White’s Turn!”), and the game knows when you win (like shouting “Checkmate!”).
+- **Player Stuff:** Set up accounts so you can log in, save your wins, and show off on the leaderboard.
+- **Error Fixes:** Added a cool error page that looks like the rest of the game, so if something goes wrong, it’s not scary—it’s like a friendly guide saying, “Let’s try that again!”
+
+Grok 3 mixed all these parts together to make a game that’s fun and easy to play.
 
 ---
 
-## Setting Up the Game: Like Building a Toy Castle
+## What Are These Batches?
 
-Let’s set up the game step by step. It’s like building a toy castle with clear instructions. Follow each step, and you’ll be playing chess in no time!
+The game is getting better in 2-3 big updates, like getting new toy sets over time. Each update adds more fun stuff! Here’s the plan:
 
-### Step 1: Get the Game Files
+- **Batch 1 (What You Have Now):** The main game with chess, accounts, profiles, a leaderboard, and a shiny error page. It fixes the leaderboard to show the right scores, makes turns super clear (like “Black’s Turn!”), and shows a cool error page when things break.
+- **Batch 2:** Might add a chat box to talk to your friend, a list of moves you made, or fancier pictures.
+- **Batch 3:** Could let you play in different game rooms, give up a game nicely, or track even more stats.
 
-You need the game files (like puzzle pieces). Clone or download the latest batch from the GitHub repository (replace with your repo link). The folder should be called `chessgame` and include:
+You can find all the game files and updates in our GitHub toy box (ask a grown-up to replace “yourusername” with the real link). Check there to see what’s new!
 
-- **Backend Files:** `app.js`, `chessgame.js`, `user.js`, `multerconfig.js`.
-- **Frontend Files:** `chess.ejs`, `dashboard.ejs`, `error.ejs`, `users.ejs`, `profile.ejs`, `login.ejs`, `leaderboard.ejs`, `profileupload.ejs`, `register.ejs`.
-- **Environment File:** `.env` for secret keys and database settings.
-- **Folders:** `public/images/uploads/` for profile pictures.
+---
 
-#### Folder Structure (like organizing a toy box):
+## Why Is This Game So Cool?
 
+This game is like a treasure chest full of fun! Here’s why you’ll love it:
+
+- Play chess with a friend, even if they’re far away, like sending moves through a magic portal.
+- Your account keeps your games safe, like a diary for your chess adventures.
+- The leaderboard shows who’s the chess king or queen, like a trophy case.
+- Drag pieces on the board, and they move smoothly, like playing with real toys.
+- Big, bold words tell you whose turn it is (e.g., “White’s Turn!”), so you never get confused.
+- If something goes wrong, a friendly error page pops up, looking dark and cool like the rest of the game, with buttons to go back or try again.
+- Upload a picture to make your profile awesome, like decorating your room!
+
+---
+
+## Stuff You Need to Play
+
+Before you start, you need a few things, like gathering tools to build a fort. Here’s your checklist:
+
+- **A Computer:** Any computer (Windows, Mac, or one with Linux) is fine, like a trusty spaceship.
+- **Node.js:** A program that makes the game work, like batteries for a toy. Get it from [nodejs.org](https://nodejs.org/) (pick the “LTS” version, like choosing a strong bike).
+- **MongoDB:** A place to save player accounts, like a magic notebook. Download it from [mongodb.com](https://mongodb.com/).
+- **Two Web Browsers:** Like Chrome and Firefox, or Chrome and Chrome’s “secret mode” (incognito). You need two to play as two players.
+- **A Terminal:** A box where you type commands, like a wizard’s spellbook.
+  - Windows: Use Command Prompt (search “cmd”) or PowerShell.
+  - Mac: Use Terminal (search “Terminal”).
+  - Linux: Use Terminal.
+- **A Grown-Up Helper (optional):** If you’re new to computers, ask a parent or older sibling to help with setup, like having a guide for a board game.
+- **A Code Editor (optional):** Like VS Code, to look at game files. It’s like a coloring book for code.
+
+---
+
+## Setting Up Your Chess Kingdom
+
+Let’s build your chess game, like putting together a toy castle! Follow these steps, and you’ll be playing soon. Ask a grown-up if you get stuck.
+
+### Step 1: Get the Game Pieces
+
+You need the game files, like puzzle pieces for your castle. Ask a grown-up to download them from our GitHub toy box (replace “yourusername” with the real link). They can “clone” or download a folder called chessgame.
+
+Inside chessgame, you’ll find:
+
+- Game Files: Like `app.js` (the game’s brain), `chessgame.js` (the chessboard), and `user.js` (player accounts).
+- Picture Pages: Files like `chess.ejs` (the chessboard page), `error.ejs` (the help page), and `dashboard.ejs` (the main menu).
+- Secret File: A file called `.env` for special keys.
+- Folders: `public/images/uploads/` for profile pictures.
+
+**What Your Folder Looks Like (like a toy box):**
 ```
 chessgame/
 ├── config/
@@ -133,455 +135,479 @@ chessgame/
 └── app.js
 ```
 
-**Command to Create the Uploads Folder:**  
-In your terminal, go to the chessgame folder (replace `path/to/chessgame` with your folder’s path):
+**Make a Picture Folder:**  
+Open your terminal (like a magic spellbook) and type this to go to the chessgame folder (replace “path/to/chessgame” with where your folder is):
 
 ```sh
 cd path/to/chessgame
 mkdir -p public/images/uploads
 ```
-*What it does:* Creates a folder to store profile pictures, like making a photo album.
+
+What it does: Makes a folder for profile pictures, like a photo album for your chess club.  
+Tip: If you see “command not found,” ask a grown-up to check your terminal.
 
 ---
 
-### Step 2: Set Up the .env File
+### Step 2: Set Up the Secret Key
 
-The game needs a special file called `.env` to keep secret keys safe, like a locked diary. Create a file named `.env` in the chessgame folder and add:
+The game needs a file called `.env`, like a secret code to keep things safe. Ask a grown-up to make a file named `.env` in the chessgame folder and put this inside:
 
 ```
 # Secret key for signing JSON Web Tokens (JWT) for authentication
-JWT_SECRET=your_strong_jwt_secret_key_here
+JWT_SECRET=supersecretkey123
 
-# Secret key for encrypting/decrypting fields (not used yet but included for future)
-FIELD_ENCRYPTION_SECRET=your_strong_field_encryption_secret_here
+# Secret key for encrypting/decrypting fields (not used yet but ready for later)
+FIELD_ENCRYPTION_SECRET=anothersecret456
 
 # MongoDB connection string for the chessgame database
 DATABASE_URL=mongodb://127.0.0.1:27017/chessgame
 ```
 
-*What it does:* Sets up keys for logins and the database connection.  
-*Tip:* Replace `your_strong_jwt_secret_key_here` and `your_strong_field_encryption_secret_here` with long, random strings (like a secret code). Don’t share this file with anyone!
-
-**Note:** The game code doesn’t yet use the `.env` file. You need to add this line at the top of `app.js`:
-```js
-require('dotenv').config();
-```
-And update `app.js` to use the `.env` variables, like:
-```js
-mongoose.connect(process.env.DATABASE_URL);
-const token = jwt.sign({ email: user.email, userid: user._id }, process.env.JWT_SECRET);
-```
+What it does: Gives the game a special key to lock your account and a map to find the player notebook (MongoDB).  
+Tip: The JWT_SECRET and FIELD_ENCRYPTION_SECRET can be any long, silly words (like “pizzacats123”), but don’t tell anyone! The DATABASE_URL should stay as is.
 
 ---
 
-### Step 3: Install Node.js Tools
+### Step 3: Get the Game Toys
 
-The game needs some helper tools (like Lego bricks). Install them with this command:
+The game needs some helper toys, like blocks for your castle. Open your terminal in the chessgame folder and type:
 
 ```sh
 npm install express socket.io chess.js mongoose bcrypt jsonwebtoken cookie-parser multer dotenv
 ```
-*What it does:* Downloads tools like express (for the website), socket.io (for real-time chess moves), mongoose (for saving player data), and dotenv (for the .env file).  
-*Tip:* Run this in the chessgame folder. It creates a `node_modules` folder and `package-lock.json`.
+
+What it does: Downloads toys like express (makes the website), socket.io (sends moves fast), and dotenv (reads the secret file).  
+What you’ll see: A new folder called `node_modules` and a file called `package-lock.json`, like a box of new toys.  
+Tip: This might take a minute, like waiting for cookies to bake. If it stops, ask a grown-up to check your internet.
 
 ---
 
-### Step 4: Start MongoDB
+### Step 4: Turn On the Player Notebook
 
-MongoDB is like a library where the game saves player accounts. You need to start it.
+MongoDB is like a magic notebook where the game saves your account and scores. You need to turn it on, like opening a storybook.
 
-**Command (Windows):**
+**For Windows:**  
+Open a new terminal and type:
 ```sh
 "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe"
 ```
-*Tip:* Replace 7.0 with your MongoDB version. Keep this terminal open.
+What it does: Starts MongoDB, like unlocking the notebook.  
+Tip: If you installed MongoDB somewhere else, ask a grown-up to find the right path. Change “7.0” to your MongoDB version (like “6.0”).  
+What you’ll see: Words like “Waiting for connections on port 27017”. Keep this terminal open!
 
-**Command (Mac/Linux):**
+**For Mac or Linux:**  
+Type:
 ```sh
 mongod
 ```
-*Note:* If MongoDB is installed elsewhere, find its path or install it first.
+What it does: Same as Windows, but easier.  
+Tip: If it says “command not found,” ask a grown-up to install MongoDB or check mongodb.com.
 
-**Check if MongoDB is Running:**
-- You should see messages like “Waiting for connections on port 27017”.
-- If you see errors, ensure MongoDB is installed or check MongoDB’s guide.
+**Check It’s Working:**  
+You should see “port 27017” in the terminal, like a green light.  
+If it doesn’t work, ask a grown-up to make sure MongoDB is installed.
 
 ---
 
-### Step 5: Start the Game Server
+### Step 5: Start the Chess Game
 
-Now, let’s turn on the game, like plugging in a toy to make it light up.
+Now, let’s light up the game, like turning on a toy robot! In the chessgame folder, type:
 
 ```sh
 node app.js
 ```
-*What it does:* Starts the game server on your computer at [http://localhost:3000](http://localhost:3000). It’s like opening the game room.  
-*Output:* You should see: `Server running on port 3000`  
-*Tip:* Keep this terminal open. If you see errors (e.g., MongoDB connection failed), check MongoDB is running.
+
+What it does: Opens the game at [http://localhost:3000](http://localhost:3000), like starting a party in your computer.  
+What you’ll see: `Server running on port 3000`  
+Tip: Keep this terminal open, like keeping the party going. If you see errors (like “Cannot connect to MongoDB”), make sure MongoDB is running.
 
 ---
 
-## Playing the Game: Your Chess Adventure Begins!
+## Playing the Game
 
-Now that the game is running, let’s play! It’s like setting up a chessboard and inviting a friend to join. You’ll need two browser windows to act as two players (like two kids playing together).
+Yay! Your chess kingdom is ready! Let’s play, like setting up a chessboard and challenging a friend. You’ll need two browsers to play as two players, like having two game controllers.
 
 ### Step 1: Open Two Browsers
 
-To play as two different players, you need two separate “game screens” that don’t mix up accounts. Think of it like using two different game controllers.
+You and your friend need separate screens, like two TVs for a game. Here’s how:
 
-- **Player 1:** Open Google Chrome (normal window).
-- **Player 2:** Open Chrome in incognito mode (Ctrl+Shift+N) or Firefox.
+- **Player 1:** Use Google Chrome (normal window, not secret mode).
+- **Player 2:** Use Chrome in secret mode (press Ctrl+Shift+N) or Firefox.
 
-*Why?* Normal and incognito windows keep accounts separate, like two different toy boxes. If you use two normal Chrome windows, they share the same account, and you’ll play against yourself!
+Why?: Normal Chrome and secret Chrome keep accounts separate, like two different toy boxes. If you use two normal Chrome windows, you’ll play against yourself by mistake!
 
 ---
 
-### Step 2: Create Two Accounts
+### Step 2: Make Two Accounts
 
-Each player needs their own account, like signing up for a chess club.
+Each player needs their own account, like getting a ticket to the chess club.
 
-#### For Player 1 (Chrome Normal):
+**Player 1 (Chrome Normal):**
 
-- Go to [http://localhost:3000](http://localhost:3000) in Chrome.
-- You’ll see the Login page. Click “Create one” to register.
+- Open Chrome and go to [http://localhost:3000](http://localhost:3000).
+- You’ll see a Login page. Click “Create one” to sign up.
 - Fill in:
-  - Username: `player1`
-  - Email: `player1@example.com`
-  - Password: `password123`
-- Click “Create Account”. You’ll go to the Dashboard, which shows buttons like “Play Game” and “View Profile”.
-- Check the top of the dashboard—it should say “player1” or show their profile picture.
-- If you get an error (like “This email is already registered”), you’ll see a nice error page with a red “Oops!” message. Try a different email.
+  - Username: SuperKnight
+  - Email: superknight@example.com
+  - Password: chessrocks123
+- Click “Create Account”. You’ll go to the Dashboard, with buttons like “Play Game” and “View Profile”.
+- Check the dashboard—it should say “SuperKnight” or show your picture.
+- If something goes wrong, a cool error page will say “Oops!” (like “This email is already used”). Try a different email or click “Go Back”.
 
-#### For Player 2 (Chrome Incognito or Firefox):
+**Player 2 (Chrome Secret Mode or Firefox):**
 
-- Go to [http://localhost:3000](http://localhost:3000) in incognito Chrome or Firefox.
-- Click “Create one” to register.
+- Open secret Chrome (Ctrl+Shift+N) or Firefox and go to [http://localhost:3000](http://localhost:3000).
+- Click “Create one”.
 - Fill in:
-  - Username: `player2`
-  - Email: `player2@example.com`
-  - Password: `password123`
-- Click “Create Account”. You’ll go to the Dashboard, showing “player2”.
-- Confirm it says “player2” to ensure it’s a different account.
-- If something goes wrong, the error page will guide you to try again or go back.
+  - Username: QueenStar
+  - Email: queenstar@example.com
+  - Password: chessrules123
+- Click “Create Account”. You’ll see the dashboard with “QueenStar”.
+- Make sure it says “QueenStar”, not “SuperKnight”.
+- If you see an error page, try again or click “Go to Dashboard”.
 
-*Tip:*  
-If you already have accounts, log in with `player1@example.com` (password: `password123`) in Chrome and `player2@example.com` in incognito/Firefox.  
-If both dashboards show the same username (e.g., both say “player2”), use incognito mode or a different browser for Player 2.
-
----
-
-### Step 3: Start the Chess Game
-
-Now, let’s jump into the chess match, like setting up the board and picking sides!
-
-#### For Player 1 (White Pieces):
-
-- In Chrome (normal), on the dashboard, click **Play Game**.
-- You’ll see the chessboard with white pieces at the bottom (you’re Player 1, playing white).
-- The screen will say “Turn: White” in big, bold letters (white text for white’s turn).
-- If you see an error page (e.g., “User not found”), log in again.
-- Open the browser console (F12 > Console) to check:
-  - You should see: `Received playerRole: w`
-  - This means you’re white and can move first.
-
-#### For Player 2 (Black Pieces):
-
-- In incognito Chrome or Firefox, click **Play Game**.
-- The chessboard loads, flipped so black pieces are at the bottom (you’re Player 2, playing black).
-- The screen will say “Turn: White” (brown text for black’s perspective).
-- If you see an error page, try refreshing or logging in again.
-- Check the console:
-  - You should see: `Received playerRole: b`
-  - The board is ready, and it’s white’s turn.
+Tip:  
+If you already have accounts, log in with superknight@example.com (password: chessrocks123) in Chrome and queenstar@example.com (password: chessrules123) in secret Chrome/Firefox.  
+If both screens show the same name (like “SuperKnight”), use secret mode or Firefox for Player 2.
 
 ---
 
-#### What’s Happening?
+### Step 3: Start the Chess Battle
 
-- The game picks Player 1 as white and Player 2 as black, like choosing teams.
-- The chessboard is a grid with light and dark squares, and pieces look like ♙ (white pawn) or ♟ (black pawn).
+Time to play chess, like knights charging into battle!
 
----
+**Player 1 (White Pieces):**
 
-### Step 4: Play Chess!
+- In Chrome (normal), on the dashboard, click Play Game.
+- You’ll see a chessboard with white pieces at the bottom (you’re white, so you go first).
+- Big, bold words above the board say “White’s Turn!” in white letters.
+- If you see an error page (like “Please log in”), log in again.
+- Press F12 and click “Console” to check:
+  - You should see: Received playerRole: w (means you’re white).
 
-You’re now in the game, like knights and queens ready for battle!
+**Player 2 (Black Pieces):**
 
-- **Player 1 (White):**
-  - Click and drag a white piece (e.g., a pawn) to a new square (like moving a pawn from e2 to e4).
-  - If the move is okay, both players’ boards update, and the screen says “Turn: Black” (in brown text).
-  - If it’s wrong, a red message appears briefly above the board (e.g., “Invalid move. Please try again.”).
+- In secret Chrome or Firefox, click Play Game.
+- The chessboard loads, flipped so black pieces are at the bottom (you’re black).
+- It says “White’s Turn!” in brown letters (white goes first).
+- If you see an error page, refresh or log in again.
+- Check the console (F12 > Console):
+  - You should see: Received playerRole: b (means you’re black).
 
-- **Player 2 (Black):**
-  - Drag a black piece (e.g., pawn from e7 to e5) when it’s your turn.
-  - The boards update, and it’s “Turn: White” again (in white text).
-
-Keep taking turns. The screen always shows whose turn it is or if someone wins (like “Checkmate! Black wins!”).
-
-**Errors:**
-- If something breaks (e.g., you try to join a game twice with the same account), you’ll go to the error page with a message like “You are already playing as white.”
-- Click “Go to Dashboard” or “Go Back” to continue.
-
-**Winning:**
-- If you checkmate the opponent (trap their king), you win! The screen shows a message, then takes you to the error page with the win message.
-- If someone leaves (closes the browser), the other player wins, and you’ll see the error page.
-- The game saves your wins and losses, updating the leaderboard like a report card.
-
-*Tip:*  
-To go back, click “Back to Dashboard” to return to the main menu.  
-Start a new game by clicking “Play Game” again.
+What’s Happening?:  
+The game makes Player 1 white and Player 2 black, like picking teams.  
+The board has light and dark squares, with pieces like ♙ (white pawn) and ♟ (black pawn).
 
 ---
 
-### Step 5: Check Your Profile and Leaderboard
+### Step 4: Play Like a Chess Wizard!
 
-After playing, see how awesome you are!
+Now you’re in the game, like a knight ready to charge!
 
-#### Profile:
+- **Player 1 (White):** Click and drag a white piece (like a pawn) to a new square (e.g., pawn from e2 to e4). If the move is good, both boards update, and it says “Black’s Turn!” in# Super Awesome Chess Adventure! 🏰♟️
 
-- On the dashboard, click **View Profile**.
-- You’ll see your username (e.g., “player1”), profile picture (or a letter if you didn’t upload one), and stats:
-  - Games Played: How many games you’ve finished.
-  - Wins: How many you won.
-  - Losses: How many you lost.
-  - Win Rate: Your winning percentage (like a batting average).
-- Click “Upload Picture” to add a cool photo!
+Hey there, kiddo! Welcome to the Super Awesome Chess Adventure, a magical computer game where you and a buddy can play chess on the internet! It’s like setting up a giant chessboard on your computer screen, dragging knights and queens with your mouse, and battling to be the chess champion. You get your own special account, like joining a secret club, and you can see who’s the best player on a cool leaderboard, like a scoreboard at a sports game. If something goes wrong, a friendly error page pops up to help you out, looking just as cool as the rest of the game!
 
-#### Leaderboard:
-
-- Click **Leaderboard** to see a table, like a sports scoreboard.
-- It shows all players, ranked by win rate (best players at the top).
-- Columns show: Rank, Player, Games, Wins, Losses, Win Rate (e.g., 75%).
-- If someone hasn’t played yet, their win rate shows as 0%.
-
-#### All Users:
-
-- Click **All Users** to see everyone in the game, with their usernames and pictures.
+This game is growing bigger and better, with new stuff being added in 2-3 big updates (like getting new toys in batches). Right now, you’ve got the first batch, with a fixed leaderboard, clear turn signs (like “White’s Turn!”), and a super nice error page that matches the game’s dark, starry look. This guide is written just for you, a 10-year-old chess fan, to make setting up and playing as easy as building a LEGO castle. Let’s jump into the adventure!
 
 ---
 
-## Fixing Problems: Like Fixing a Broken Toy
+## What’s in This Guide? 📖
 
-Sometimes, things don’t work right, like a toy that won’t light up. Here are common issues and how to fix them, explained simply.
-
-### Problem 1: Both Browsers Show the Same Player
-
-**What’s Happening?**  
-You log in as “player1” in one window and “player2” in another, but both show “player2” (or the same name).
-
-**Why?**  
-If you use two normal Chrome windows, they share the same “key” (a cookie) that tells the game who you are. The second login replaces the first.
-
-**Fix:**
-- Use Chrome incognito (Ctrl+Shift+N) or Firefox for Player 2.
-- After logging in, check the dashboard to confirm “player1” in one window and “player2” in the other.
-- Clear cookies in both browsers:
-  - Chrome: Settings > Privacy and security > Clear browsing data > Cookies.
-  - Firefox: Settings > Privacy & Security > Cookies and Site Data > Clear Data.
-
-**Retry logging in with different browsers.**
-
-**Check:**
-- In the terminal, look for:  
-  `Assigned white to: <userId1>`  
-  `Assigned black to: <userId2>`
-- The `<userId1>` and `<userId2>` should be different.
-- In the browser console (F12 > Console), see `playerRole: w` in one window and `playerRole: b` in the other.
+- What’s This Chess Game?
+- How Did We Make It?
+- What Are These Batches?
+- Why Is This Game So Cool?
+- Stuff You Need to Play
+- Setting Up Your Chess Kingdom
+- Playing the Game
+- Fixing Stuff That Goes Wrong
+- Magic Commands for Your Computer
+- What’s Inside the Game?
+- Tips to Be a Chess Star
+- Help! I’m Stuck!
+- What’s Coming Next?
 
 ---
 
-### Problem 2: Leaderboard Shows Wrong Stats
+## What’s This Chess Game?
 
-**What’s Happening?**  
-The leaderboard doesn’t show the right wins, losses, or win rates.
+This is a chess game you play on a website that you run on your computer. It’s like having a chessboard that lives in your browser (like Chrome or Firefox). Here’s what you can do:
 
-**Why?**  
-The game might not be saving stats correctly, or the leaderboard isn’t sorting properly.
+- **Make an Account:** Sign up with a username and password, like getting a ticket to a fun park.
+- **Play Chess:** Battle a friend, where one of you moves white pieces and the other moves black pieces. Drag pieces to make moves!
+- **See Your Score:** Check how many games you’ve won or lost, like getting a report card for chess.
+- **Look at the Leaderboard:** See who’s the best chess player, like a list of top soccer players.
+- **Add a Picture:** Upload a cool photo for your profile, like putting a sticker on your backpack.
+- **Get Help from Errors:** If something breaks, a friendly page shows up with a message like “Oops! Try again!” and buttons to go back.
 
-**Fix:**
-- Play a game to completion (e.g., checkmate or disconnect).
-- Check the terminal for errors like “Failed to update stats for player”.
-- Visit [http://localhost:3000/leaderboard](http://localhost:3000/leaderboard) and refresh the page.
-- If stats are still wrong, restart the server: `node app.js`
-- Ensure MongoDB is running: `mongod`
+You play this game by going to [http://localhost:3000](http://localhost:3000) in your browser, which is like opening a secret door on your computer. You and your friend need two browsers (like two game controllers) to play together.
 
 ---
 
-### Problem 3: Turn Display Isn’t Clear
+## How Did We Make It?
 
-**What’s Happening?**  
-The game doesn’t show “Turn: White” or “Turn: Black” clearly.
+This game is super special because it was built with a helper called Grok 3, a smart robot brain made by xAI. It’s like having a wizard help us build a castle! Here’s how Grok 3 helped:
 
-**Why?**  
-The turn messages might not be updating or are hard to see.
+- **Chess Magic:** Made the chessboard work so pieces move right, turns switch (like “White’s Turn!”), and the game knows when you win (like shouting “Checkmate!”).
+- **Player Stuff:** Set up accounts so you can log in, save your wins, and show off on the leaderboard.
+- **Error Fixes:** Added a cool error page that looks like the rest of the game, so if something goes wrong, it’s not scary—it’s like a friendly guide saying, “Let’s try that again!”
 
-**Fix:**
-- Start a new game and check the gameStatus text above the chessboard.
-- It should say “Turn: White” (white text) or “Turn: Black” (brown text) in big, bold letters.
-- If it’s blank, check the console (F12 > Console) for errors like gameStatus not received.
-- Restart the server: `node app.js`
-- Refresh both browsers.
+Grok 3 mixed all these parts together to make a game that’s fun and easy to play.
 
 ---
 
-### Problem 4: Error Page Shows Up Unexpectedly
+## What Are These Batches?
 
-**What’s Happening?**  
-You see the error page with a message like “Oops! Something went wrong.”
+The game is getting better in 2-3 big updates, like getting new toy sets over time. Each update adds more fun stuff! Here’s the plan:
 
-**Why?**  
-Something broke, like trying to log in with wrong details or joining a game incorrectly.
+- **Batch 1 (What You Have Now):** The main game with chess, accounts, profiles, a leaderboard, and a shiny error page. It fixes the leaderboard to show the right scores, makes turns super clear (like “Black’s Turn!”), and shows a cool error page when things break.
+- **Batch 2:** Might add a chat box to talk to your friend, a list of moves you made, or fancier pictures.
+- **Batch 3:** Could let you play in different game rooms, give up a game nicely, or track even more stats.
 
-**Fix:**
-- Read the error message on the page (e.g., “Invalid email or password”).
-- Click “Go to Dashboard” to try again or “Go Back” to return to the previous page.
-- Check the terminal for errors (e.g., “MongoServerError” means MongoDB isn’t running).
-- Restart MongoDB if needed: `mongod`
-- Restart the server: `node app.js`
+You can find all the game files and updates in our GitHub toy box (ask a grown-up to replace “yourusername” with the real link). Check there to see what’s new!
 
 ---
 
-### Problem 5: Game Won’t Start
+## Why Is This Game So Cool?
 
-**What’s Happening?**  
-You click “Play Game”, but you see an error page or nothing happens.
+This game is like a treasure chest full of fun! Here’s why you’ll love it:
 
-**Why?**  
-The game might not connect to the server, or MongoDB isn’t running.
-
-**Fix:**
-- Ensure the server is running (`node app.js` shows “Server running on port 3000”).
-- Check MongoDB is on: `mongod`
-- Open the browser console (F12 > Console) and look for:
-  - Socket.IO connected: `<socket_id>` (good).
-  - Socket.IO error (bad—server isn’t running or browser can’t connect).
-- Restart the server: `node app.js`
-- Refresh both browsers.
+- Play chess with a friend, even if they’re far away, like sending moves through a magic portal.
+- Your account keeps your games safe, like a diary for your chess adventures.
+- The leaderboard shows who’s the chess king or queen, like a trophy case.
+- Drag pieces on the board, and they move smoothly, like playing with real toys.
+- Big, bold words tell you whose turn it is (e.g., “White’s Turn!”), so you never get confused.
+- If something goes wrong, a friendly error page pops up, looking dark and cool like the rest of the game, with buttons to go back or try again.
+- Upload a picture to make your profile awesome, like decorating your room!
 
 ---
 
-### Problem 6: Can’t Move Pieces
+## Stuff You Need to Play
 
-**What’s Happening?**  
-You try to drag a piece, but it won’t move, and a red message appears.
+Before you start, you need a few things, like gathering tools to build a fort. Here’s your checklist:
 
-**Why?**  
-You might be trying to move the wrong color (e.g., black pieces when it’s white’s turn).
-
-**Fix:**
-- Check the game status (e.g., “Turn: White”). Only white can move if it’s white’s turn.
-- Ensure you’re the right player (white = Player 1, black = Player 2).
-- Console check: Look for `invalidMove` in the browser console. If present, the move wasn’t allowed by chess rules.
-
----
-
-### Problem 7: Server Crashes
-
-**What’s Happening?**  
-The terminal shows an error, and the game stops.
-
-**Why?**  
-Could be a MongoDB issue or a code error.
-
-**Fix:**
-- Read the error in the terminal.
-- If it says “MongoServerError”, MongoDB isn’t running. Start it: `mongod`
-- If it’s something else, copy the error and ask for help.
-- Restart the server: `node app.js`
+- **A Computer:** Any computer (Windows, Mac, or one with Linux) is fine, like a trusty spaceship.
+- **Node.js:** A program that makes the game work, like batteries for a toy. Get it from [nodejs.org](https://nodejs.org/) (pick the “LTS” version, like choosing a strong bike).
+- **MongoDB:** A place to save player accounts, like a magic notebook. Download it from [mongodb.com](https://mongodb.com/).
+- **Two Web Browsers:** Like Chrome and Firefox, or Chrome and Chrome’s “secret mode” (incognito). You need two to play as two players.
+- **A Terminal:** A box where you type commands, like a wizard’s spellbook.
+  - Windows: Use Command Prompt (search “cmd”) or PowerShell.
+  - Mac: Use Terminal (search “Terminal”).
+  - Linux: Use Terminal.
+- **A Grown-Up Helper (optional):** If you’re new to computers, ask a parent or older sibling to help with setup, like having a guide for a board game.
+- **A Code Editor (optional):** Like VS Code, to look at game files. It’s like a coloring book for code.
 
 ---
 
-## All Terminal Commands: Your Game Recipe
+## Setting Up Your Chess Kingdom
 
-Here’s every command you’ll need, like steps in a recipe:
+Let’s build your chess game, like putting together a toy castle! Follow these steps, and you’ll be playing soon. Ask a grown-up if you get stuck.
 
-**Go to the Game Folder:**
+### Step 1: Get the Game Pieces
+
+You need the game files, like puzzle pieces for your castle. Ask a grown-up to download them from our GitHub toy box (replace “yourusername” with the real link). They can “clone” or download a folder called chessgame.
+
+Inside chessgame, you’ll find:
+
+- Game Files: Like `app.js` (the game’s brain), `chessgame.js` (the chessboard), and `user.js` (player accounts).
+- Picture Pages: Files like `chess.ejs` (the chessboard page), `error.ejs` (the help page), and `dashboard.ejs` (the main menu).
+- Secret File: A file called `.env` for special keys.
+- Folders: `public/images/uploads/` for profile pictures.
+
+**What Your Folder Looks Like (like a toy box):**
+```
+chessgame/
+├── config/
+│   └── multerconfig.js
+├── models/
+│   └── user.js
+├── public/
+│   ├── images/
+│   │   └── uploads/
+│   └── js/
+│       └── chessgame.js
+├── views/
+│   ├── chess.ejs
+│   ├── dashboard.ejs
+│   ├── error.ejs
+│   ├── leaderboard.ejs
+│   ├── login.ejs
+│   ├── profile.ejs
+│   ├── profileupload.ejs
+│   ├── register.ejs
+│   └── users.ejs
+├── .env
+└── app.js
+```
+
+**Make a Picture Folder:**  
+Open your terminal (like a magic spellbook) and type this to go to the chessgame folder (replace “path/to/chessgame” with where your folder is):
+
 ```sh
 cd path/to/chessgame
-```
-Moves you to the game’s folder (replace `path/to/chessgame` with your folder’s path).
-
-**Create the Uploads Folder:**
-```sh
 mkdir -p public/images/uploads
 ```
-Makes a place for profile pictures.
 
-**Install Tools:**
+What it does: Makes a folder for profile pictures, like a photo album for your chess club.  
+Tip: If you see “command not found,” ask a grown-up to check your terminal.
+
+---
+
+### Step 2: Set Up the Secret Key
+
+The game needs a file called `.env`, like a secret code to keep things safe. Ask a grown-up to make a file named `.env` in the chessgame folder and put this inside:
+
+```
+# Secret key for signing JSON Web Tokens (JWT) for authentication
+JWT_SECRET=supersecretkey123
+
+# Secret key for encrypting/decrypting fields (not used yet but ready for later)
+FIELD_ENCRYPTION_SECRET=anothersecret456
+
+# MongoDB connection string for the chessgame database
+DATABASE_URL=mongodb://127.0.0.1:27017/chessgame
+```
+
+What it does: Gives the game a special key to lock your account and a map to find the player notebook (MongoDB).  
+Tip: The JWT_SECRET and FIELD_ENCRYPTION_SECRET can be any long, silly (like “pizzacats123”), but don’t tell anyone! The DATABASE_URL should stay as is.
+
+---
+
+### Step 3: Get the Game Toys
+
+The game needs some helper toys, like blocks for your castle. Open your terminal in the chessgame folder and type:
+
 ```sh
 npm install express socket.io chess.js mongoose bcrypt jsonwebtoken cookie-parser multer dotenv
 ```
-Gets all the game’s building blocks.
 
-**Start MongoDB (in a separate terminal):**
+What it does: Downloads toys like express (makes the website), socket.io (sends moves fast), and dotenv (reads the secret file).  
+What you’ll see: A new folder called `node_modules` and a file called `package-lock.json`, like a box of new toys.  
+Tip: This might take a minute, like waiting for cookies to bake. If it stops, ask a grown-up to check your internet.
 
-- **Windows:**
-  ```sh
-  "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe"
-  ```
-- **Mac/Linux:**
-  ```sh
-  mongod
-  ```
-Starts the player data library.
+---
 
-**Start the Game:**
+### Step 4: Turn On the Player Notebook
+
+MongoDB is like a magic notebook where the game saves your account and scores. You need to turn it on, like opening a storybook.
+
+**For Windows:**  
+Open a new terminal and type:
+```sh
+"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe"
+```
+What it does: Starts MongoDB, like unlocking the notebook.  
+Tip: If you installed MongoDB somewhere else, ask a grown-up to find the right path. Change “7.0” to your MongoDB version (like “6.0”).  
+What you’ll see: Words like “Waiting for connections on port 27017”. Keep this terminal open!
+
+**For Mac or Linux:**  
+Type:
+```sh
+mongod
+```
+What it does: Same as Windows, but easier.  
+Tip: If it says “command not found,” ask a grown-up to install MongoDB or check mongodb.com.
+
+**Check It’s Working:**  
+You should see “port 27017” in the terminal, like a green light.  
+If it doesn’t work, ask a grown-up to make sure MongoDB is installed.
+
+---
+
+### Step 5: Start the Chess Game
+
+Now, let’s light up the game, like turning on a toy robot! In the chessgame folder, type:
+
 ```sh
 node app.js
 ```
-Opens the game room on [http://localhost:3000](http://localhost:3000).
+
+What it does: Opens the game at [http://localhost:3000](http://localhost:3000), like starting a party in your computer.  
+What you’ll see: `Server running on port 3000`  
+Tip: Keep this terminal open, like keeping the party going. If you see errors (like “Cannot connect to MongoDB”), make sure MongoDB is running.
 
 ---
 
-## What’s Inside the Game? Like Peeking into a Toy Box
+## Playing the Game
 
-Here’s what each file does, explained simply:
+Yay! Your chess kingdom is ready! Let’s play, like setting up a chessboard and challenging a friend. You’ll need two browsers to play as two players, like having two game controllers.
 
-- **app.js:** The game’s brain. It sets up the website, handles logins, manages chess moves, updates the leaderboard, and shows the error page when something breaks.
-- **chessgame.js:** Makes the chessboard appear in your browser, lets you drag pieces, shows whose turn it is (e.g., “Turn: White”), and displays errors nicely.
-- **user.js:** A blueprint for player accounts, storing your username, email, password, and game stats (wins, losses, win rate).
-- **multerconfig.js:** Helps save your profile picture, like a camera for your game character.
-- **views/chess.ejs:** The chessboard page where you play, showing the turn in big, bold letters.
-- **views/dashboard.ejs:** The main menu with buttons like “Play Game” and “Leaderboard”.
-- **views/error.ejs:** A cool-looking page that shows up when something goes wrong, with a message like “Oops! Try again!” and buttons to go back.
-- **views/users.ejs:** Lists all players, like a class roster.
-- **views/profile.ejs:** Shows your picture, name, and stats, like a player card.
-- **views/login.ejs:** Where you log in to the game.
-- **views/leaderboard.ejs:** Shows who’s winning, like a sports ranking, with accurate stats.
+### Step 1: Open Two Browsers
+
+You and your friend need separate screens, like two TVs for a game. Here’s how:
+
+- **Player 1:** Use Google Chrome (normal window, not secret mode).
+- **Player 2:** Use Chrome in secret mode (press Ctrl+Shift+N) or Firefox.
+
+Why?: Normal Chrome and secret Chrome keep accounts separate, like two different toy boxes. If you use two normal Chrome windows, you’ll play against yourself by mistake!
 
 ---
 
-## Tips for a Great Game
+### Step 2: Make Two Accounts
 
-- **Use Different Browsers:** Always use incognito mode or a different browser (e.g., Chrome and Firefox) for Player 2 to keep accounts separate.
-- **Check the Console:** If something’s wrong, press F12 in the browser and look at the Console tab. It’s like a game’s debug screen.
-- **Have Fun!:** Try to checkmate your friend, and check the leaderboard to see who’s the chess master.
-- **Save Your Progress:** The game saves your wins and losses automatically, so you can come back later.
+Each player needs their own account, like getting a ticket to the chess club.
+
+**Player 1 (Chrome Normal):**
+
+- Open Chrome and go to [http://localhost:3000](http://localhost:3000).
+- You’ll see a Login page. Click “Create one” to sign up.
+- Fill in:
+  - Username: SuperKnight
+  - Email: superknight@example.com
+  - Password: chessrocks123
+- Click “Create Account”. You’ll go to the Dashboard, with buttons like “Play Game” and “View Profile”.
+- Check the dashboard—it should say “SuperKnight” or show your picture.
+- If something goes wrong, a cool error page will say “Oops!” (like “This email is already used”). Try a different email or click “Go Back”.
+
+**Player 2 (Chrome Secret Mode or Firefox):**
+
+- Open secret Chrome (Ctrl+Shift+N) or Firefox and go to [http://localhost:3000](http://localhost:3000).
+- Click “Create one”.
+- Fill in:
+  - Username: QueenStar
+  - Email: queenstar@example.com
+  - Password: chessrules123
+- Click “Create Account”. You’ll see the dashboard with “QueenStar”.
+- Make sure it says “QueenStar”, not “SuperKnight”.
+- If you see an error page, try again or click “Go to Dashboard”.
+
+Tip:  
+If you already have accounts, log in with superknight@example.com (password: chessrocks123) in Chrome and queenstar@example.com (password: chessrules123) in secret Chrome/Firefox.  
+If both screens show the same name (like “SuperKnight”), use secret mode or Firefox for Player 2.
 
 ---
 
-## Need Help?
+### Step 3: Start the Chess Battle
 
-If you get stuck, it’s okay! Here’s what to do:
+Time to play chess, like knights charging into battle!
 
-- **Read the Error:** Look at the terminal or browser console (F12 > Console) for clues.
-- **Try Again:** Restart the server (`node app.js`) or refresh the browser.
-- **Ask for Help:** Share the error message with a friend, teacher, or open an issue on this repo. Include:
-  - What you did (e.g., “I clicked Play Game”).
-  - What went wrong (e.g., “Both players are player1”).
-  - Any error messages from the terminal or browser.
+**Player 1 (White Pieces):**
+
+- In Chrome (normal), on the dashboard, click Play Game.
+- You’ll see a chessboard with white pieces at the bottom (you’re white, so you go first).
+- Big, bold words above the board say “White’s Turn!” in white letters.
+- If you see an error page (like “Please log in”), log in again.
+- Press F12 and click “Console” to check:
+  - You should see: Received playerRole: w (means you’re white).
+
+**Player 2 (Black Pieces):**
+
+- In secret Chrome or Firefox, click Play Game.
+- The chessboard loads, flipped so black pieces are at the bottom (you’re black).
+- It says “White’s Turn!” in brown letters (white goes first).
+- If you see an error page, refresh or log in again.
+- Check the console (F12 > Console):
+  - You should see: Received playerRole: b (means you’re black).
+
+What’s Happening?:  
+The game makes Player 1 white and Player 2 black, like picking teams.  
+The board has light and dark squares, with pieces like ♙ (white pawn) and ♟ (black pawn).
 
 ---
 
-## What’s Next?
+### Step 4: Play Like a Chess Wizard!
 
-You’re now a chess game master! If you want to make the game even cooler, you could:
+Now you’re in the game, like a knight ready to charge!
 
-- Add a chat box so players can talk during the game.
-- Let multiple chess games happen at once (like different game rooms).
-- Add a “resign” button to give up a game early.
-- Show a list of moves made in the game, like a game replay.
-
----
-
-**Have fun playing, and may your knights and queens lead you to victory! 🏆**
+- **Player 1 (White):** Click and drag a white piece (like a pawn) to a new square (e.g., pawn from e2 to e4). If the move is good, both boards update, and it says “Black’s Turn!” in
