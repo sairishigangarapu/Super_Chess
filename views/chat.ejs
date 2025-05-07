@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room - Chess Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-900 text-white">
+    <div class="min-h-screen p-10">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Chess Chat Room</h1>
+            <a href="/dashboard" class="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg">Back to Dashboard</a>
+        </div>
+        <div class="bg-zinc-800 p-6 rounded-lg max-w-2xl mx-auto">
+            <div id="chatMessages" class="h-96 overflow-y-auto mb-4 p-4 bg-zinc-700 rounded"></div>
+            <div id="chatError" class="text-red-500 text-lg mb-4 hidden"></div>
+            <div class="flex gap-2">
+                <input type="text" id="messageInput" class="flex-1 bg-zinc-700 text-white px-4 py-2 rounded" placeholder="Type your message...">
+                <button id="sendButton" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const userId = "<%= user._id %>";
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatError = document.getElementById('chatError');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.emit('sendMessage', { userId, message });
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        socket.on('receiveMessage', ({ username, message, timestamp }) => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'mb-2';
+            messageElement.innerHTML = `<span class="font-semibold text-blue-400">${username}</span> (${timestamp}): ${message}`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        socket.on('chatError', (message) => {
+            chatError.innerText = message;
+            chatError.classList.remove('hidden');
+            setTimeout(() => {
+                chatError.classList.add('hidden');
+                chatError.innerText = '';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

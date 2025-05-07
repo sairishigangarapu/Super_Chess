@@ -19,10 +19,26 @@ const io = socket(server);
 mongoose.connect('mongodb://127.0.0.1:27017/chessgame');
 
 // Game state
+const games = {}; // Track active games: { gameId: { white: userId, black: userId, fen: string } }
 const chess = new Chess();
 let players = {};
 let currentPlayer = 'w';
 let currentGameId = null;
+
+// Simple word filter for chat moderation
+const badWords = ['badword1', 'badword2', 'curse', 'swear']; // Replace with actual inappropriate words
+const filterMessage = (message) => {
+    let cleanMessage = message;
+    let hasBadWord = false;
+    badWords.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'i');
+        if (regex.test(message)) {
+            hasBadWord = true;
+        }
+        cleanMessage = cleanMessage.replace(regex, '****');
+    });
+    return { isClean: !hasBadWord, cleanMessage };
+};
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
@@ -186,7 +202,44 @@ app.get('/leaderboard', isLoggedIn, async (req, res, next) => {
 app.get('/play', isLoggedIn, async (req, res, next) => {
     try {
         const user = await userModel.findById(req.user.userid);
-        res.render('chess', { title: 'Chess Game', user });
+        res.render('chess', { title: 'Chess Game', user, isSpectator: false });
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.get('/chat', isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await userModel.findById(req.user.userid);
+        res.render('chat', { user });
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.get('/spectate', isLoggedIn, async (req, res, next) => {
+    try {
+        const activeGames = Object.keys(games).map(gameId => ({
+            gameId,
+            white: games[gameId].white ? games[gameId].white.username : 'Unknown',
+            black: games[gameId].black ? games[gameId].black.username : 'Unknown'
+        }));
+        res.render('spectate', { activeGames });
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.get('/spectate/:gameId', isLoggedIn, async (req, res, next) => {
+    try {
+        const { gameId } = req.params;
+        if (!games[gameId]) {
+            const err = new Error('This game does not exist or has ended.');
+            err.status = 404;
+            throw err;
+        }
+        const user = await userModel.findById(req.user.userid);
+        res.render('chess', { title: 'Spectate Game', user, isSpectator: true, gameId });
     } catch (error) {
         next(error);
     }
@@ -200,7 +253,7 @@ app.get('/error', (req, res) => {
 
 // Socket.IO Logic
 io.on('connection', (socket) => {
-    socket.on('joinGame', async ({ userId }) => {
+    socket.on('joinGame', async ({ userId, gameId }) => {
         try {
             const user = await userModel.findById(userId);
             if (!user) {
@@ -208,32 +261,71 @@ io.on('connection', (socket) => {
                 return;
             }
 
-            if (players.white && players.white.userId === userId) {
-                socket.emit('error', 'You are already playing as white. Use another account or browser.');
-                return;
-            }
-            if (players.black && players.black.userId === userId) {
-                socket.emit('error', 'You are already playing as black. Use another account or browser.');
-                return;
-            }
+            if (!gameId) {
+                // Player joining a new game
+                if (players.white && players.white.userId === userId) {
+                    socket.emit('error', 'You are already playing as white. Use another account or browser.');
+                    return;
+                }
+                if (players.black && players.black.userId === userId) {
+                    socket.emit('error', 'You are already playing as black. Use another account or browser.');
+                    return;
+                }
 
-            if (!players.white) {
-                players.white = { socketId: socket.id, userId };
-                console.log('Assigned white to:', userId);
-                socket.emit('playerRole', 'w');
-                currentGameId = Date.now().toString();
-            } else if (!players.black) {
-                players.black = { socketId: socket.id, userId };
-                console.log('Assigned black to:', userId);
-                socket.emit('playerRole', 'b');
+                if (!players.white) {
+                    players.white = { socketId: socket.id, userId, username: user.username };
+                    console.log('Assigned white to:', userId);
+                    socket.emit('playerRole', 'w');
+                    currentGameId = Date.now().toString();
+                    games[currentGameId] = { white: players.white, black: null, fen: chess.fen() };
+                } else if (!players.black) {
+                    players.black = { socketId: socket.id, userId, username: user.username };
+                    console.log('Assigned black to:', userId);
+                    socket.emit('playerRole', 'b');
+                    games[currentGameId].black = players.black;
+                } else {
+                    socket.emit('spectatorRole');
+                }
+
+                socket.join(currentGameId);
+                socket.emit('gameStatus', `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`);
+                socket.emit('boardState', chess.fen());
             } else {
+                // Spectator joining an existing game
+                if (!games[gameId]) {
+                    socket.emit('error', 'This game does not exist or has ended.');
+                    return;
+                }
+                socket.join(gameId);
                 socket.emit('spectatorRole');
+                socket.emit('boardState', games[gameId].fen);
+                socket.emit('gameStatus', `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`);
             }
-
-            socket.emit('gameStatus', `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`);
-            socket.emit('boardState', chess.fen());
         } catch (error) {
             socket.emit('error', 'Failed to join game. Try refreshing the page.');
+        }
+    });
+
+    socket.on('sendMessage', async ({ userId, message }) => {
+        try {
+            const user = await userModel.findById(userId);
+            if (!user) {
+                socket.emit('chatError', 'User not found. Please log in again.');
+                return;
+            }
+            const { isClean, cleanMessage } = filterMessage(message);
+            if (!isClean) {
+                socket.emit('chatError', 'Vulgar language can’t be used.');
+                return;
+            }
+            const chatMessage = {
+                username: user.username,
+                message: cleanMessage,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            io.emit('receiveMessage', chatMessage);
+        } catch (error) {
+            socket.emit('chatError', 'Failed to send message. Try again.');
         }
     });
 
@@ -254,8 +346,9 @@ io.on('connection', (socket) => {
             const result = chess.move(move);
             if (result) {
                 currentPlayer = chess.turn();
-                io.emit('move', move);
-                io.emit('boardState', chess.fen());
+                games[currentGameId].fen = chess.fen();
+                io.to(currentGameId).emit('move', move);
+                io.to(currentGameId).emit('boardState', chess.fen());
 
                 let status = `Turn: ${chess.turn() === 'w' ? 'White' : 'Black'}`;
                 let gameOver = false;
@@ -292,10 +385,10 @@ io.on('connection', (socket) => {
                     gameOver = true;
                 }
 
-                io.emit('gameStatus', status);
+                io.to(currentGameId).emit('gameStatus', status);
 
                 if (gameOver) {
-                    io.emit('gameOver', status);
+                    io.to(currentGameId).emit('gameOver', status);
                     resetGame();
                 }
             } else {
@@ -311,19 +404,20 @@ io.on('connection', (socket) => {
         if (socket.id === players.white?.socketId) {
             if (players.black) {
                 await updateGameStats(players.black.userId, players.white.userId);
-                io.emit('gameStatus', 'White disconnected. Black wins!');
-                io.emit('gameOver', 'White disconnected. Black wins!');
+                io.to(currentGameId).emit('gameStatus', 'White disconnected. Black wins!');
+                io.to(currentGameId).emit('gameOver', 'White disconnected. Black wins!');
             }
             delete players.white;
         } else if (socket.id === players.black?.socketId) {
             if (players.white) {
                 await updateGameStats(players.white.userId, players.black.userId);
-                io.emit('gameStatus', 'Black disconnected. White wins!');
-                io.emit('gameOver', 'Black disconnected. White wins!');
+                io.to(currentGameId).emit('gameStatus', 'Black disconnected. White wins!');
+                io.to(currentGameId).emit('gameOver', 'Black disconnected. White wins!');
             }
             delete players.black;
         }
-        if (!players.white && !players.black) {
+        if (!players.white && !players.black && currentGameId) {
+            delete games[currentGameId];
             players = {};
             chess.reset();
             currentGameId = null;
@@ -359,6 +453,9 @@ async function updateGameStats(winnerId, loserId, isDraw = false) {
 
 function resetGame() {
     console.log("Resetting game state...");
+    if (currentGameId) {
+        delete games[currentGameId];
+    }
     chess.reset();
     players = {};
     currentPlayer = 'w';
